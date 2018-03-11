@@ -1,31 +1,34 @@
 module.exports = function longestConsecutiveLength(array) {
   // your solution here
-  if(array.length<2){
-    return array.length;
+  if(array.length==0){
+    return 0;
   }
-  var map=new Map();
+  var set=new Set();
+  var lehgth=0;
   var currLength;
+  var currEl;
   for(var i=0;i<array.length; i++){
-    if(map.has(array[i])){
-      continue;
-    }else{
-      if(map.has(array[i]-1)&&map.has(array[i]+1)){
-        currLength=map.get(array[i]-1)+map.get(array[i]+1)+1;
-        map.set(array[i]- map.get(array[i]-1), currLength);
-        map.set(array[i]+ map.get(array[i]+1), currLength);
-        map.set(array[i], currLength);
-      }else if(map.has(array[i]-1)){
-        currLength=map.get(array[i]-1)+1;
-        map.set(array[i]- map.get(array[i]-1), currLength);
-        map.set(array[i], currLength);
-      }else if(map.has(array[i]+1)){
-        currLength=map.get(array[i]+1)+1;
-        map.set(array[i]+ map.get(array[i]+1), currLength);
-        map.set(array[i], currLength);
-      }else {
-        map.set(array[i], 1);
+    set.add(array[i]);
+  }
+  for(var i=0;i<array.length; i++){
+    if(set.has(array[i])){
+      currLength=0;
+      currEl=array[i];
+      while(set.has(currEl)){
+        currLength++;
+        set.delete(currEl);
+        currEl++;
+      }
+      currEl=array[i]-1;
+      while(set.has(currEl)){
+        currLength++;
+        set.delete(currEl);
+        currEl--;
+      }
+      if(currLength>lehgth){
+        lehgth=currLength;
       }
     }
   }
-  return Math.max(...map.values());
+  return lehgth;
 }
